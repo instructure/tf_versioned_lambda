@@ -1,0 +1,14 @@
+FROM lambci/lambda:build
+
+ENV AWS_DEFAULT_REGION us-east-1
+ARG LAMBDA_DEST
+ARG CONFIG_FILE_CONTENTS
+ENV LAMBDA_DEST $LAMBDA_DEST
+
+WORKDIR /app/
+
+COPY . /app/
+
+RUN npm install
+
+CMD /app/build_lambda.sh

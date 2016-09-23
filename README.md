@@ -1,0 +1,128 @@
+# tf_versioned_lambda
+
+A terraform module that builds and deploys NodeJS lambda functions
+
+## Requirements
+- Docker (for building the lambda function)
+- AWS creds in your shell
+- Your nodejs lambda code in a folder with a package.json at the folder root
+
+
+## What it does
+This module takes care of building your lambda function *during* a terraform run and
+also knows when to update and redeploy it. That means you can have a single terraform
+run that creates, deploys, and updates your lambas, which is much better than seperate steps
+of building and deploying.
+
+Since it uses docker to build your code, it also builds binary modules properly regardless of environments
+
+## Example
+```
+resource "aws_iam_role" "my_lambda_role" {
+  name = "my_lambda_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "log_perms" {
+  name = "log_perms"
+  role = "${aws_iam_role.my_lambda_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "read_only_s3" {
+  name = "emr_readOnlyS3_policy"
+  role = "${aws_iam_role.hd_lambda.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_s3_bucket" "lambda_deploy" {
+  bucket = "my-lambda-deploy-bucket"
+}
+
+module "my_lambda" {
+  source         = "github.com/instructure/tf_versioned_lambda"
+  name           = "my_lambda"
+  role           = "${aws_iam_role.my_lambda_role.arn}"
+  handler        = "index.handler"
+  runtime        = "nodejs4.3"
+  package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
+  package_prefix = "myLambda/builds/"
+  lambda_dir     = "files/my_lambda_code"
+  config_string  = "{\"configKey\": \"someValue"}"
+}
+```
+
+Once again, its assumed that `files/my_lambda_code` is a proper npm module with a package.json at the root
+
+## Docs
+See `docs/tf_versioned_lambda.md` for a full list of options and what is returned from the module
+
+## How to update?
+Updates are triggered when either the config has changed, or the package.json inside the lambda changes
+This means if you want to deploy a new lambda, you should bump something like your version, which is nice
+and might actually get you to version your code with semver
+
+## How does it work?
+- Uses a null resource that is triggered by hashes of the config and package.json
+- This null resource runs a provisioner that builds the lambda inside docker and uploads it to s3
+- The terraform knows where the new s3 package should be and changes the lambda to point at it
+
+## Config
+Its pretty common pattern that you want to have multiple copies of a lambda running in different
+environments with different config values. To make that easy, this exposes the ability to write a single
+arbitrary blob of json at `config.json` at deploy time. Currently, this is the `config_string` variable
+which is expected that you generate, but this may turn into being a terraform map in the future
+
+##Transpiling/Compiling
+The docker build script runs npm install on code, so if you have a post-install npm script, you could
+transpile your code using babel/typescript, whatever you like
+
+## Ignoring some files in the build
+
+If you want to avoid some files from being packaged into your zip file, you can place a `.lambdaignore`
+file in the code directory and those files will not be included
+
