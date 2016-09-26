@@ -5,7 +5,10 @@ set -e
 outDir=${1:-./docs}
 
 function genDocs() {
-  terraform-docs md . > "${outDir}/tf_versioned_lambda.md"
+  terraform-docs md "$1" > "${outDir}/$(basename $1).md"
 }
 
-genDocs
+for tfPath in modules/*; do
+  echo "building docs for $tfPath"
+  genDocs $tfPath
+done

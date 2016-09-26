@@ -10,7 +10,7 @@ die () {
 }
 
 destS3Path=$LAMBDA_DEST
-if [ ! -z "$var" ]; then
+if [ -z "$destS3Path" ]; then
   die "missing lambda destination"
 fi
 ignoreFile=.lambdaignore

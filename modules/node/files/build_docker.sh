@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e
+
+CURDIR=$(pwd)
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 die () {
@@ -22,9 +24,10 @@ lambdaDest=$3
 configContents=$4
 echo "building docker container"
 mytmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'lambda'`
+sourceDir=$(realpath ${CURDIR}/${lambdaDir})
 cd $mytmpdir
 cp -r $DIR/* .
-cp -r $lambdaDir/* .
+cp -r $sourceDir/* .
 
 echo "$configContents" > config.json
 docker build \
