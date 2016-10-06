@@ -31,7 +31,7 @@ cp -r $sourceDir/* .
 
 echo "$configContents" > config.json
 docker build \
-  -f Dockerfile.lambda.scala \
+  -f Dockerfile.lambda.sc \
   -t lambda_builder_${lambdaName} \
   --build-arg LAMBDA_DEST=${lambdaDest} \
   --build-arg JAR_PATH=${jarFile} \
