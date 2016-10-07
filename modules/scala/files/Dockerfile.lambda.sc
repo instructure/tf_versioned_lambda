@@ -19,7 +19,7 @@ RUN mkdir -p /opt && \
 WORKDIR /app/
 
 COPY . /app/
-RUN mkdir $(dirname "$CONFIG_FILE_DEST")
+RUN mkdir -p $(dirname "$CONFIG_FILE_DEST")
 COPY config.json $CONFIG_FILE_DEST
 
 RUN /opt/sbt/bin/sbt "$SBT_TASK_NAME"
