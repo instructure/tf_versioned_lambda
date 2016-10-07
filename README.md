@@ -96,9 +96,9 @@ module "my_lambda" {
   handler        = "index.handler"
   runtime        = "nodejs4.3"
   package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
-  package_prefix = "myLambda/builds/"
+  package_prefix = "myLambda/builds"
   lambda_dir     = "files/my_lambda_code"
-  config_string  = "{\"configKey\": \"someValue"}"
+  config_string  = "{\"configKey\": \"someValue\"}"
 }
 ```
 
@@ -122,7 +122,7 @@ and might actually get you to version your code with semver
 ## Config
 Its pretty common pattern that you want to have multiple copies of a lambda running in different
 environments with different config values. To make that easy, this exposes the ability to write a single
-arbitrary blob of json at `config.json` at deploy time. Currently, this is the `config_string` variable
+arbitrary blob of json which will be saved at the root of the lambda as `config.json`. Currently, this is the `config_string` variable
 which is expected that you generate, but this may turn into being a terraform map in the future
 
 ##Transpiling/Compiling JS code
