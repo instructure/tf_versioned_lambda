@@ -41,3 +41,8 @@ variable "runtime" {
   description = "the runtime of the lambda function"
   default     = "nodejs4.3"
 }
+
+variable "timeout" {
+  description = "The amount of time your Lambda Function has to run in seconds."
+  default     = "3"
+}
