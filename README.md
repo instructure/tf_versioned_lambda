@@ -90,13 +90,13 @@ resource "aws_s3_bucket" "lambda_deploy" {
 }
 
 module "my_lambda" {
-  source         = "github.com/instructure/tf_versioned_lambda/modules/node"
+  source         = "github.com/instructure/tf_versioned_lambda//modules/node"
   name           = "my_lambda"
   role           = "${aws_iam_role.my_lambda_role.arn}"
   handler        = "index.handler"
   runtime        = "nodejs4.3"
   package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
-  package_prefix = "myLambda/builds/"
+  package_prefix = "myLambda/builds"
   lambda_dir     = "files/my_lambda_code"
   config_string  = "{\"configKey\": \"someValue\"}"
 }
