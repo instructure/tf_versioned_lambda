@@ -54,3 +54,8 @@ variable "sbt_task" {
 variable "output_jar_path" {
   description = "the path of the jar written by sbt to upload"
 }
+
+variable "timeout" {
+  description = "The amount of time your Lambda Function has to run in seconds."
+  default     = "3"
+}
