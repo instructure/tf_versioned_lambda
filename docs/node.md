@@ -13,6 +13,7 @@
 | description | the description to the lambda function | `"a lambda function"` | no |
 | memory_size | the amount of memory to use | `"128"` | no |
 | runtime | the runtime of the lambda function | `"nodejs4.3"` | no |
+| timeout | The amount of time your Lambda Function has to run in seconds. | `"3"` | no |
 
 ## Outputs
 
