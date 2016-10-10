@@ -3,6 +3,10 @@
 set -e
 CURDIR=$(pwd)
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+# shim in realpath
+command -v realpath >/dev/null 2>&1 || realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+  }
 
 die () {
   echo >&2 "$@"
