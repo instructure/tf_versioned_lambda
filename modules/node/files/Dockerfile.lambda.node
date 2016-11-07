@@ -9,6 +9,6 @@ WORKDIR /app/
 
 COPY . /app/
 
-RUN npm install --production
+RUN npm install && npm prune --production
 
 CMD /app/build_lambda.sh
