@@ -98,7 +98,9 @@ module "my_lambda" {
   package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
   package_prefix = "myLambda/builds"
   lambda_dir     = "files/my_lambda_code"
-  config_string  = "{\"configKey\": \"someValue\"}"
+  config_string  = <<EOF
+  {"configKey": "someValue"}
+EOF
 }
 ```
 

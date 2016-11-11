@@ -46,3 +46,13 @@ variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds."
   default     = "3"
 }
+
+variable "vpc_subnet_ids" {
+  description = "pass subnets to run inside a VPC, must be used with vpc_security_group_ids"
+  default     = []
+}
+
+variable "vpc_security_group_ids" {
+  description = "pass security group ids to run inside a VPC, must be used with vpc_subnet_ids"
+  default     = []
+}
