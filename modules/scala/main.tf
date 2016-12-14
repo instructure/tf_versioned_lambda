@@ -28,4 +28,8 @@ resource "aws_lambda_function" "lambda" {
     subnet_ids         = "${var.vpc_subnet_ids}"
     security_group_ids = "${var.vpc_security_group_ids}"
   }
+
+  environment {
+    variables = "${var.environment_variables}"
+  }
 }

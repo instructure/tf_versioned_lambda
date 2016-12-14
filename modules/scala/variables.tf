@@ -69,3 +69,9 @@ variable "vpc_security_group_ids" {
   description = "pass security group ids to run inside a VPC, must be used with vpc_subnet_ids"
   default     = []
 }
+
+variable "environment_variables" {
+  description = "Optional map of environment variables that will be available within your lambda"
+  type        = "map"
+  default     = {}
+}
