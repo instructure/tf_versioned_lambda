@@ -135,3 +135,11 @@ transpile your code using babel/typescript, whatever you like
 If you want to avoid some files from being packaged into your zip file, you can place a `.lambdaignore`
 file in the code directory and those files will not be included
 
+## Custom Build Scripts
+In some instances, you might need to do something slightly different in how you build your docker image, such as
+passing custom `build-args` or volumes for caching. This is possible by passing a `build_script` variable that implements
+the required functionality. It is generally expected to fork the existing files (found in `module/{node,scala}/files/build_docker.sh`).
+Additionally, rather than using the `DIR` variable, an environment variable `SOURCE_REPO` is passed so that you can reference the existing files
+
+See `examples/node` for an example
+

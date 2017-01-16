@@ -14,8 +14,7 @@
 | memory_size | the amount of memory to use | `"128"` | no |
 | runtime | the runtime of the lambda function | `"nodejs4.3"` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. | `"3"` | no |
-| vpc_subnet_ids | pass subnets to run inside a VPC, must be used with vpc_security_group_ids | - | yes |
-| vpc_security_group_ids | pass security group ids to run inside a VPC, must be used with vpc_subnet_ids | - | yes |
+| build_script | allow for passing a custom build script, which overrides default build_docker.sh | `""` | no |
 
 ## Outputs
 

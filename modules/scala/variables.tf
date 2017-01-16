@@ -60,6 +60,7 @@ variable "timeout" {
   default     = "3"
 }
 
+/* Not working
 variable "vpc_subnet_ids" {
   description = "pass subnets to run inside a VPC, must be used with vpc_security_group_ids"
   default     = []
@@ -68,4 +69,10 @@ variable "vpc_subnet_ids" {
 variable "vpc_security_group_ids" {
   description = "pass security group ids to run inside a VPC, must be used with vpc_subnet_ids"
   default     = []
+}
+*/
+
+variable "build_script" {
+  description = "allow for passing a custom build script, which overrides default build_docker.sh"
+  default     = ""
 }

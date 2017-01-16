@@ -13,7 +13,9 @@ module "my_lambda" {
   package_bucket = "tf-versioned-lambda-${data.aws_caller_identity.current.account_id}"
   package_prefix = "tf_versioned/builds"
   lambda_dir     = "files/hello_world"
-  config_string  = <<EOF
+  build_script   = "files/custom_build_docker.sh"
+
+  config_string = <<EOF
   {"name": "From Node"}
 EOF
 }
