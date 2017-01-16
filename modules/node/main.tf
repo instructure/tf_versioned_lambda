@@ -5,7 +5,7 @@ resource "null_resource" "inject_build" {
   }
 
   provisioner "local-exec" {
-    command = "${format("%s/files/build_docker.sh", path.module)} ${var.name} ${var.lambda_dir} ${format("s3://%s/%s/%s_%s.zip", var.package_bucket, var.package_prefix, var.name, sha1(format("%s%s", var.config_string, sha1(file(format("%s/package.json", var.lambda_dir))))))} '${var.config_string}'"
+    command = "SOURCE_REPO=${format("%s/files/", path.module)} ${coalesce(var.build_script, format("%s/files/build_docker.sh", path.module))} ${var.name} ${var.lambda_dir} ${format("s3://%s/%s/%s_%s.zip", var.package_bucket, var.package_prefix, var.name, sha1(format("%s%s", var.config_string, sha1(file(format("%s/package.json", var.lambda_dir))))))} '${var.config_string}'"
   }
 }
 
@@ -24,12 +24,10 @@ resource "aws_lambda_function" "lambda" {
   memory_size       = "${var.memory_size}"
   timeout           = "${var.timeout}"
 
-  vpc_config = {
-    subnet_ids         = "${var.vpc_subnet_ids}"
-    security_group_ids = "${var.vpc_security_group_ids}"
-  }
-
-  environment {
-    variables = "${var.environment_variables}"
-  }
+  /* not working
+      vpc_config = {
+        subnet_ids         = "${var.vpc_subnet_ids}"
+        security_group_ids = "${var.vpc_security_group_ids}"
+      }
+      */
 }
