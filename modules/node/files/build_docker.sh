@@ -35,6 +35,7 @@ cp -r $sourceDir/* .
 
 echo "$configContents" > config.json
 docker build \
+  --pull \
   -f Dockerfile.lambda.node \
   -t lambda_builder_${lambdaName} \
   --build-arg LAMBDA_DEST=${lambdaDest} . || die "failed to build image"
