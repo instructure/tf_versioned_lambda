@@ -22,4 +22,5 @@ else
   zip -9qyr $outFile .
 fi
 
+aws configure set default.s3.signature_version s3v4
 aws s3 cp $outFile $destS3Path
