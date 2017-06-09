@@ -3,10 +3,10 @@
 set -e
 CURDIR=$(pwd)
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-# shim in realpath
-command -v realpath >/dev/null 2>&1 || realpath() {
-    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-  }
+# join a relative path or give the full path
+joinpath() {
+  [[ "$2" = /* ]] && echo "$2" || echo "$1/${2#./}"
+}
 
 die () {
   echo >&2 "$@"
@@ -28,7 +28,7 @@ jarFile=$4
 configContents=$5
 echo "building docker container"
 mytmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'lambda'`
-sourceDir=$(realpath ${CURDIR}/${lambdaDir})
+sourceDir=$(joinpath "${CURDIR}" "${lambdaDir}")
 cd $mytmpdir
 cp -r $DIR/* .
 cp -r $sourceDir/* .
