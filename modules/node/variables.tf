@@ -63,3 +63,8 @@ variable "build_script" {
   description = "allow for passing a custom build script, which overrides default build_docker.sh"
   default     = ""
 }
+
+variable "count" {
+  default     = "1"
+  description = "Passes through to terraform count."
+}

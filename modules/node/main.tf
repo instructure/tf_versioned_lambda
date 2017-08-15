@@ -10,6 +10,7 @@ resource "null_resource" "inject_build" {
 }
 
 resource "aws_lambda_function" "lambda" {
+  count      = "${var.count}"
   depends_on = ["null_resource.inject_build"]
   s3_bucket  = "${var.package_bucket}"
   s3_key     = "${var.package_prefix}/${var.name}_${sha1(format("%s%s", var.config_string, sha1(file(format("%s/package.json", var.lambda_dir)))))}.zip"
