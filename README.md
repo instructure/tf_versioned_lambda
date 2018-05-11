@@ -94,7 +94,7 @@ module "my_lambda" {
   name           = "my_lambda"
   role           = "${aws_iam_role.my_lambda_role.arn}"
   handler        = "index.handler"
-  runtime        = "nodejs8.10"
+  runtime        = "nodejs10.x"
   package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
   package_prefix = "myLambda/builds"
   lambda_dir     = "files/my_lambda_code"

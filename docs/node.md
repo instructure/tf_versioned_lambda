@@ -12,7 +12,7 @@
 | role | the lambda role to run as | - | yes |
 | description | the description to the lambda function | `"a lambda function"` | no |
 | memory_size | the amount of memory to use | `"128"` | no |
-| runtime | the runtime of the lambda function | `"nodejs8.10"` | no |
+| runtime | the runtime of the lambda function | `"nodejs10.x"` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. | `"3"` | no |
 | build_script | allow for passing a custom build script, which overrides default build_docker.sh | `""` | no |
 
