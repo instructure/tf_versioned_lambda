@@ -1,4 +1,4 @@
-FROM lambci/lambda:build-nodejs4.3
+FROM lambci/lambda:build-nodejs8.10
 
 ENV AWS_DEFAULT_REGION us-east-1
 ARG LAMBDA_DEST
