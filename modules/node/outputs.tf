@@ -1,7 +1,11 @@
 output "lambda_arn" {
-  value = "${aws_lambda_function.lambda.arn}"
+  value = "${module.lambda.lambda_arn}"
 }
 
 output "lambda_name" {
-  value = "${aws_lambda_function.lambda.function_name}"
+  value = "${module.lambda.lambda_name}"
+}
+
+output "s3_location" {
+  value = "${module.build.s3_location}"
 }

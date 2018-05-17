@@ -9,8 +9,7 @@ A few terraform module that build and deploy lambda functions in a few languages
 ## Requirements
 - Docker (for building the lambda function)
 - AWS creds in your shell
-- Your nodejs lambda code in a folder with a package.json at the folder root
-
+- A compatible build (see docs for each language on what is required)
 
 ## What it does
 This module takes care of building your lambda function *during* a terraform run and
@@ -106,6 +105,28 @@ EOF
 
 Once again, its assumed that `files/my_lambda_code` is a proper npm module with a package.json at the root
 
+## Node package requirements
+
+For a node package to work, it primarily needs a just a package.json in the `lambda_dir` directory.
+
+## Scala package requirements
+
+The scala package is a bit more complex, you must:
+
+1. Be using SBT
+2. Have a built.sbt in the root of `lambda_dir`
+3. Be able to produce a jar with required dependencies (such as an uberjar with `sbt assembly`)
+
+In order to trigger a new deploy, this code takes a sha of `build.sbt`, this means you may need to put a version
+number or something in your `build.sbt` to have something to trigger changes
+
+## VPC Support
+This module supports VPC, but in order to do so, it has to use some terraform "tricks".
+
+If you provide subnet_ids, it uses a different underlying resource. This means that if you add or remove
+running in a vpc, the lambda function will be removed and re-added. Additionally, any VPC lambdas get appending with
+`<function_name>_vpc`
+
 ## Docs
 See `docs/*.md` for a full list of options for each language lambda
 
@@ -143,3 +164,16 @@ Additionally, rather than using the `DIR` variable, an environment variable `SOU
 
 See `examples/node` for an example
 
+## Reusinig a build for multiple lambdas
+
+If you have multiple lambda functions in a single package, you can only have to upload one package by using the `node_build` or `scala_build` modules, these are used by the respective `node` and `scala` modules along with the `lambda` module
+
+## Releases
+
+Majors "releases" will be tagged in git using semver. It is reccomended you use a `?ref=<tag>` in terraform for stability. Breaking changes are considered not only new APIs, but also those that are desctructive to resources.
+
+### Release History
+
+- `2.0.0`, a large rework that breaks the modules into separate build and deploy modules, as well as adding lots of new features. This can result in a desctruction and recreation of a lambda. However, no breaking API changes
+- `1.1.0`, fixes bugs with regions that only support v4 s3 signing and with passing for paths when using custom build script
+- `1.0.0`, initial release

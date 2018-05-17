@@ -5,8 +5,9 @@ lazy val root = (project in file(".")).
     name := "hello_world",
     version := "1.0",
     scalaVersion := "2.11.4",
-    libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % "1.0.0",
-    libraryDependencies += "com.amazonaws" % "aws-lambda-java-events" % "1.0.0",
+    libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
+    libraryDependencies += "com.amazonaws" % "aws-lambda-java-events" % "2.1.0",
+    libraryDependencies += "com.amazonaws" % "aws-java-sdk-s3" % "1.11.163",
     libraryDependencies += "org.json4s" %% "json4s-native" % "3.2.10"
   )
 

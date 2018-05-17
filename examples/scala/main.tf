@@ -12,6 +12,6 @@ module "my_lambda" {
   package_bucket  = "tf-versioned-lambda-${data.aws_caller_identity.current.account_id}"
   package_prefix  = "tf_versioned/builds"
   lambda_dir      = "files/hello_world"
-  config_string   = "{\"name\": \"From Scala\"}"
+  config          = "{\"name\": \"From Scala\"}"
   output_jar_path = "target/scala-2.11/lambda.jar"
 }

@@ -5,6 +5,7 @@ try {
   config = {name: 'default'}
 }
 module.exports.handler = function(event, context, cb) {
+  console.log(process.env)
   console.log('hello world ' + config.name)
   cb(null, config.name)
 }

@@ -1,5 +1,9 @@
+variable "region" {
+  default = "us-east-1"
+}
+
 provider "aws" {
-  region = "us-east-1"
+  region = "${var.region}"
 }
 
 data "aws_caller_identity" "current" {}
@@ -28,26 +32,6 @@ resource "aws_iam_role" "my_lambda_role" {
 EOF
 }
 
-resource "aws_iam_role_policy" "log_perms" {
-  name = "log_perms"
-  role = "${aws_iam_role.my_lambda_role.id}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:*"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy" "read_only_s3" {
   name = "emr_readOnlyS3_policy"
   role = "${aws_iam_role.my_lambda_role.id}"
@@ -67,6 +51,12 @@ resource "aws_iam_role_policy" "read_only_s3" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_policy_attachment" "eni_perms" {
+  name = "eni_perms"
+  roles = ["${aws_iam_role.my_lambda_role.id}"]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 output "role_arn" {

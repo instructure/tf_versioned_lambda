@@ -6,9 +6,12 @@ variable "package_bucket" {
   description = "the bucket to write the lambda package too"
 }
 
+variable "package_location" {
+  description = "the s3 key where the lambda package is"
+}
+
 variable "handler" {
   description = "the name of the handler"
-  default     = "index.handler"
 }
 
 variable "role" {
@@ -22,16 +25,11 @@ variable "description" {
 
 variable "memory_size" {
   description = "the amount of memory to use"
-  default     = "512"
+  default     = "128"
 }
 
 variable "runtime" {
   description = "the runtime of the lambda function"
-  default     = "java8"
-}
-
-variable "output_jar_path" {
-  description = "the path of the jar written by sbt to upload"
 }
 
 variable "timeout" {
@@ -40,7 +38,7 @@ variable "timeout" {
 }
 
 variable "reserved_concurrent_executions" {
-  description = "The number of concurrent lambda functions that can run"
+  description = "The number of concurrent lambda functions that can run (NOT CURRENTLY RESPECTED!)"
   default     = ""
 }
 
@@ -66,38 +64,4 @@ variable "env_vars" {
   description = "environment variables to add to the function"
   type        = "map"
   default     = {}
-}
-
-variable "package_prefix" {
-  description = "the prefix to use in the s3 bucket for writing lambda packages"
-  default     = "lambda_packages"
-}
-
-variable "lambda_dir" {
-  description = "the absolute path to the lambda directory you want to upload (must have a package.json)"
-}
-
-variable "config_string" {
-  description = "DEPRECATED, renamed 'config'"
-  default     = ""
-}
-
-variable "config" {
-  description = "a json string that will get written as 'config.json' into the package"
-  default     = ""
-}
-
-variable "config_dest" {
-  description = "the location to write the conig file, generally the root of the resoures dir"
-  default     = "src/main/resources/config.json"
-}
-
-variable "sbt_task" {
-  description = "the sbt task to run"
-  default     = "assembly"
-}
-
-variable "build_script" {
-  description = "allow for passing a custom build script, which overrides default build_docker.sh"
-  default     = ""
 }

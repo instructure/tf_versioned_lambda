@@ -1,33 +1,33 @@
-resource "null_resource" "inject_build" {
-  triggers {
-    config_val    = "${var.config_string}"
-    build_sbt_sha = "${sha1(file(format("%s/build.sbt", var.lambda_dir)))}"
-  }
+module "build" {
+  source = "../scala_build"
 
-  provisioner "local-exec" {
-    command = "SOURCE_REPO=${format("%s/files/", path.module)} SBT_TASK_NAME=${var.sbt_task} CONFIG_FILE_DEST=${var.config_dest} ${coalesce(var.build_script, format("%s/files/build_docker.sh", path.module))} ${var.name} ${var.lambda_dir} ${format("s3://%s/%s/%s_%s.jar", var.package_bucket, var.package_prefix, var.name, sha1(format("%s%s", var.config_string, sha1(file(format("%s/build.sbt", var.lambda_dir))))))} ${var.output_jar_path} '${var.config_string}'"
-  }
+  name            = "${var.name}"
+  build_script    = "${var.build_script}"
+  config          = "${coalesce(var.config, var.config_string, "{}")}"
+  config_dest     = "${var.config_dest}"
+  lambda_dir      = "${var.lambda_dir}"
+  output_jar_path = "${var.output_jar_path}"
+  package_bucket  = "${var.package_bucket}"
+  package_prefix  = "${var.package_prefix}"
+  sbt_task        = "${var.sbt_task}"
 }
 
-resource "aws_lambda_function" "lambda" {
-  depends_on = ["null_resource.inject_build"]
-  s3_bucket  = "${var.package_bucket}"
-  s3_key     = "${var.package_prefix}/${var.name}_${sha1(format("%s%s", var.config_string, sha1(file(format("%s/build.sbt", var.lambda_dir)))))}.jar"
+module "lambda" {
+  source = "../lambda"
 
-  # work around https://github.com/hashicorp/terraform/issues/5673
-  s3_object_version = "null"
-  function_name     = "${var.name}"
-  handler           = "${var.handler}"
-  role              = "${var.role}"
-  runtime           = "${var.runtime}"
-  description       = "${var.description}"
-  memory_size       = "${var.memory_size}"
-  timeout           = "${var.timeout}"
+  package_bucket   = "${var.package_bucket}"
+  package_location = "${module.build.s3_key}"
 
-  /*
-      vpc_config = {
-        subnet_ids         = "${var.vpc_subnet_ids}"
-        security_group_ids = "${var.vpc_security_group_ids}"
-      }
-      */
+  name                           = "${var.name}"
+  handler                        = "${var.handler}"
+  role                           = "${var.role}"
+  runtime                        = "${var.runtime}"
+  description                    = "${var.description}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
+  vpc_subnet_ids                 = "${var.vpc_subnet_ids}"
+  vpc_security_group_ids         = "${var.vpc_security_group_ids}"
+  env_vars                       = "${var.env_vars}"
+  tags                           = "${var.tags}"
 }
