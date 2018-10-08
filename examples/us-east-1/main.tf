@@ -54,8 +54,8 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "eni_perms" {
-  name = "eni_perms"
-  roles = ["${aws_iam_role.my_lambda_role.id}"]
+  name       = "eni_perms"
+  roles      = ["${aws_iam_role.my_lambda_role.id}"]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
