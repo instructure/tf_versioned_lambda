@@ -14,9 +14,11 @@ module "my_lambda" {
   package_prefix = "tf_versioned/builds"
   lambda_dir     = "files/hello_world"
   build_script   = "files/custom_build_docker.sh"
+
   tags = {
     MyCustomTag = "foobar"
   }
+
   env_vars = {
     MyEnvVar = "foobar"
   }

@@ -22,6 +22,7 @@
 
 | Name | Description |
 |------|-------------|
+| invoke_arn |  |
 | lambda_arn |  |
 | lambda_name |  |
 
