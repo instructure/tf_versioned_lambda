@@ -16,7 +16,7 @@
 | package_prefix | the prefix to use in the s3 bucket for writing lambda packages | string | `lambda_packages` | no |
 | reserved_concurrent_executions | The number of concurrent lambda functions that can run | string | `` | no |
 | role | the lambda role to run as | string | - | yes |
-| runtime | the runtime of the lambda function | string | `nodejs8.10` | no |
+| runtime | the runtime of the lambda function | string | `nodejs10.x` | no |
 | tags | tags to apply to the function | map | `<map>` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. | string | `3` | no |
 | vpc_security_group_ids | pass security group ids to run inside a VPC, must be used with vpc_subnet_ids | list | `<list>` | no |
