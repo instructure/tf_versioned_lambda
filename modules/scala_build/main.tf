@@ -6,7 +6,7 @@ locals {
 }
 
 resource "null_resource" "inject_build" {
-  triggers {
+  triggers = {
     config_val    = "${var.config}"
     build_sbt_sha = "${local.build_sbt_sha}"
   }

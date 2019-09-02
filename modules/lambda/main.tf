@@ -54,8 +54,8 @@ resource "aws_lambda_function" "lambda_vpc" {
   #reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
 
   vpc_config {
-    subnet_ids         = ["${var.vpc_subnet_ids}"]
-    security_group_ids = ["${var.vpc_security_group_ids}"]
+    subnet_ids         = "${var.vpc_subnet_ids}"
+    security_group_ids = "${var.vpc_security_group_ids}"
   }
   environment {
     variables = "${local.merged_envs}"
