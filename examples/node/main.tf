@@ -1,8 +1,13 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
   region = "us-east-1"
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 module "my_lambda" {
   source         = "../../modules/node"
@@ -26,4 +31,6 @@ module "my_lambda" {
   config = <<EOF
   {"name": "From Node"}
 EOF
+
 }
+

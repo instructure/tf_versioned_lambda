@@ -1,12 +1,17 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 variable "region" {
   default = "us-east-1"
 }
 
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+}
 
 resource "aws_s3_bucket" "test_bucket" {
   bucket = "tf-versioned-lambda-${data.aws_caller_identity.current.account_id}"
@@ -30,11 +35,12 @@ resource "aws_iam_role" "my_lambda_role" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "read_only_s3" {
   name = "emr_readOnlyS3_policy"
-  role = "${aws_iam_role.my_lambda_role.id}"
+  role = aws_iam_role.my_lambda_role.id
 
   policy = <<EOF
 {
@@ -51,18 +57,20 @@ resource "aws_iam_role_policy" "read_only_s3" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy_attachment" "eni_perms" {
   name       = "eni_perms"
-  roles      = ["${aws_iam_role.my_lambda_role.id}"]
+  roles      = [aws_iam_role.my_lambda_role.id]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 output "role_arn" {
-  value = "${aws_iam_role.my_lambda_role.arn}"
+  value = aws_iam_role.my_lambda_role.arn
 }
 
 output "s3_bucket" {
-  value = "${aws_s3_bucket.test_bucket.id}"
+  value = aws_s3_bucket.test_bucket.id
 }
+

@@ -91,10 +91,10 @@ resource "aws_s3_bucket" "lambda_deploy" {
 module "my_lambda" {
   source         = "github.com/instructure/tf_versioned_lambda//modules/node"
   name           = "my_lambda"
-  role           = "${aws_iam_role.my_lambda_role.arn}"
+  role           = aws_iam_role.my_lambda_role.arn
   handler        = "index.handler"
   runtime        = "nodejs10.x"
-  package_bucket = "${aws_s3_bucket.lambda_deploy.id}"
+  package_bucket = aws_s3_bucket.lambda_deploy.id
   package_prefix = "myLambda/builds"
   lambda_dir     = "files/my_lambda_code"
   config_string  = <<EOF
@@ -173,7 +173,7 @@ If you have multiple lambda functions in a single package, you can only have to 
 Majors "releases" will be tagged in git using semver. It is reccomended you use a `?ref=<tag>` in terraform for stability. Breaking changes are considered not only new APIs, but also those that are desctructive to resources.
 
 ### Release History
-
+- `3.0.0`, making terraform 12 the minimum version.
 - `2.0.0`, a large rework that breaks the modules into separate build and deploy modules, as well as adding lots of new features. This can result in a desctruction and recreation of a lambda. However, no breaking API changes
 - `1.1.0`, fixes bugs with regions that only support v4 s3 signing and with passing for paths when using custom build script
 - `1.0.0`, initial release
