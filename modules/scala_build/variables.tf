@@ -38,3 +38,4 @@ variable "sbt_task" {
   description = "the sbt task to run"
   default     = "assembly"
 }
+

@@ -24,3 +24,4 @@ variable "package_prefix" {
   description = "the prefix to use in the s3 bucket for writing lambda packages"
   default     = "lambda_packages"
 }
+

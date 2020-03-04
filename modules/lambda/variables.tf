@@ -44,24 +44,25 @@ variable "reserved_concurrent_executions" {
 
 variable "vpc_subnet_ids" {
   description = "pass subnets to run inside a VPC, must be used with vpc_security_group_ids"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
 variable "vpc_security_group_ids" {
   description = "pass security group ids to run inside a VPC, must be used with vpc_subnet_ids"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
 variable "tags" {
   description = "tags to apply to the function"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
 variable "env_vars" {
   description = "environment variables to add to the function"
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
+
