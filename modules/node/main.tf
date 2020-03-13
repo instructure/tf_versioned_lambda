@@ -27,4 +27,5 @@ module "lambda" {
   vpc_security_group_ids         = "${var.vpc_security_group_ids}"
   env_vars                       = "${var.env_vars}"
   tags                           = "${var.tags}"
+  layers                         = "${var.layers}"
 }

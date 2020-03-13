@@ -101,3 +101,9 @@ variable "build_script" {
   description = "allow for passing a custom build script, which overrides default build_docker.sh"
   default     = ""
 }
+
+variable "layers" {
+  description = "lambda layers. This is a pass through variable."
+  type        = "list"
+  default     = []
+}
