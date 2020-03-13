@@ -65,3 +65,9 @@ variable "env_vars" {
   type        = "map"
   default     = {}
 }
+
+variable "layers" {
+  description = "lambda layers. This is a pass through variable."
+  type        = "list"
+  default     = []
+}

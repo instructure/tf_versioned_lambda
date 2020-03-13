@@ -1,4 +1,4 @@
-FROM hashicorp/terraform
+FROM hashicorp/terraform:0.11.14
 
 # install terraform-docs
 RUN apk add --update curl bash && \

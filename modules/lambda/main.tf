@@ -33,7 +33,8 @@ resource "aws_lambda_function" "lambda" {
   environment {
     variables = "${local.merged_envs}"
   }
-  tags = "${local.merged_tags}"
+  tags   = "${local.merged_tags}"
+  layers = "${var.layers}"
 }
 
 resource "aws_lambda_function" "lambda_vpc" {
