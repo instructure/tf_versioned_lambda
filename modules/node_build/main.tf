@@ -17,6 +17,8 @@ locals {
   s3_location = format("s3://%s/%s", var.package_bucket, local.s3_key)
 }
 
+data "aws_region" "current" {}
+
 resource "null_resource" "inject_build" {
   triggers = {
     config_val       = var.config
@@ -24,7 +26,13 @@ resource "null_resource" "inject_build" {
   }
 
   provisioner "local-exec" {
-    command = "SOURCE_REPO=${format("%s/files/", path.module)} ${local.build_script} ${var.name} ${var.lambda_dir} '${local.s3_location}' '${var.config}'"
+    command = "${local.build_script} ${var.name} ${var.lambda_dir} '${local.s3_location}' '${var.config}'"
+
+    environment = {
+      AWS_DEFAULT_REGION = data.aws_region.current.name
+      AWS_REGION         = data.aws_region.current.name
+      SOURCE_REPO        = format("%s/files/", path.module)
+    }
   }
 }
 

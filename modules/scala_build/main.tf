@@ -17,6 +17,8 @@ locals {
   s3_location = format("s3://%s/%s", var.package_bucket, local.s3_key)
 }
 
+data "aws_region" "current" {}
+
 resource "null_resource" "inject_build" {
   triggers = {
     config_val    = var.config
@@ -24,7 +26,15 @@ resource "null_resource" "inject_build" {
   }
 
   provisioner "local-exec" {
-    command = "SOURCE_REPO=${format("%s/files/", path.module)} SBT_TASK_NAME=${var.sbt_task} CONFIG_FILE_DEST=${var.config_dest} ${local.build_script} ${var.name} ${var.lambda_dir} '${local.s3_location}' ${var.output_jar_path} '${var.config}'"
+    command = "${local.build_script} ${var.name} ${var.lambda_dir} '${local.s3_location}' ${var.output_jar_path} '${var.config}'"
+
+    environment = {
+      AWS_DEFAULT_REGION = data.aws_region.current.name
+      AWS_REGION         = data.aws_region.current.name
+      CONFIG_FILE_DEST   = var.config_dest
+      SBT_TASK_NAME      = var.sbt_task
+      SOURCE_REPO        = format("%s/files/", path.module)
+    }
   }
 }
 
