@@ -1,6 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-}
 
 locals {
   build_script = coalesce(
@@ -31,7 +28,7 @@ resource "null_resource" "inject_build" {
 # this is a bit of a hack, we use this resource to depend on build_upload resource
 # and then rely on an output from this file, this ensures that any dependencies
 # happen after build_upload has finished
-resource "aws_s3_bucket_object" "finished_upload" {
+resource "aws_s3_object" "finished_upload" {
   depends_on = [null_resource.inject_build]
   bucket     = var.package_bucket
   key        = replace(local.s3_key, ".jar", ".finished")
