@@ -1,6 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-}
 
 module "build" {
   source = "../scala_build"
