@@ -1,4 +1,4 @@
-FROM lambci/lambda:build-nodejs12.x
+FROM lambci/lambda:build-nodejs16.x
 
 ENV AWS_DEFAULT_REGION us-east-1
 ARG LAMBDA_DEST
