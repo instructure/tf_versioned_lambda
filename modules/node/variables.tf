@@ -27,7 +27,7 @@ variable "memory_size" {
 
 variable "runtime" {
   description = "the runtime of the lambda function"
-  default     = "nodejs10.x"
+  default     = "nodejs16.x"
 }
 
 variable "timeout" {
